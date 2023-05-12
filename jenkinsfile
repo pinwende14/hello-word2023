@@ -15,13 +15,21 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/pinwende14/hello-word2023.git'
             }
         }
+        stage (Sonarqube scan) {
+            steps{
+                withSonarQubeEnv('sonarQube') {
+                sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectkey=pinwende14_geolocation'
+                }
+
+            }
+        }
         stage('Code Build') {
-            steps {
+            steps{
                 sh 'mvn clean package'
             }
         }
         stage('Test') {
-            steps {
+            steps{
                 sh 'mvn test'
             }
         }
